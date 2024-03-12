@@ -9,6 +9,17 @@ namespace LabogCheat.Import
     {
         public static void Main()
         {
+            Grammalecte();
+            Gutenberg();
+        }
+
+        private static void Gutenberg() {
+            var lines = File.ReadAllLines("gutenberg_raw.txt");
+            File.WriteAllLines("../cheat/gutenberg.txt", lines.Select(l => RemoveDiacritics(l)));
+        }
+
+        private static void Grammalecte()
+        {
             var lines = File.ReadAllLines("./grammalecte_raw.txt");
             var result = new List<string>();
             foreach (var line in lines)

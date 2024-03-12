@@ -22,7 +22,7 @@ namespace LabogCheat {
                 }
                 else {
                     var words = Solve(grid, dico, letter[0]);
-                    Console.WriteLine($"voici les mots commençant par {letter} dans votre grille : ");
+                    Console.WriteLine($"voici les mots commençant par {letter.ToUpper()} dans votre grille : ");
                     if(!words.Any()) {
                         Console.WriteLine($"aucun mot trouvé commençant par {letter}");
                     }
