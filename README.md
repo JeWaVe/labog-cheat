@@ -8,5 +8,3 @@ dotnet run
 ```
 
 et suivre les instructions. 
-
-Attention : ce programme ne trouve pas tous les mots. 
