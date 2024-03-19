@@ -12,18 +12,9 @@ namespace LabogCheat
             dico.Feed(File.ReadAllLines("gutenberg.txt").Select(w => w.Trim().ToLowerInvariant()));
 
             Console.Out.WriteLine("Entrez la liste de lettres de la grille (jointives, dans le sens de la lecture) : ");
-            string input;
-            while(true) {
-                input = Console.ReadLine().Trim().ToLowerInvariant();
-                if(input.Length != 16 || input.Any(c => c < 'a' || c > 'z')) {
-                    Console.WriteLine("invalid input, try again");
-                    continue;
-                }
-                break;
-            }
+            Grid grid = ReadGrid();
 
-            var grid = new Grid(input);
-
+            // main loop
             while (true)
             {
                 Console.WriteLine("entrez la lettre de départ voulue (STOP pour quitter): ");
@@ -57,6 +48,24 @@ namespace LabogCheat
             }
         }
 
+        private static Grid ReadGrid()
+        {
+            string input;
+            while (true)
+            {
+                input = Console.ReadLine().Trim().ToLowerInvariant();
+                if (input.Length != 16 || input.Any(c => c < 'a' || c > 'z'))
+                {
+                    Console.WriteLine("invalid input, try again");
+                    continue;
+                }
+                break;
+            }
+
+            var grid = new Grid(input);
+            return grid;
+        }
+
         static IEnumerable<string> Solve(Grid grid, Dictionary dico, char letter)
         {
             if (!grid.Contains(letter))
@@ -83,7 +92,8 @@ namespace LabogCheat
         {
             var currentWord = grid.FromPath(currentPath);
             var contains = dico.Contains(currentWord);
-            if(contains == Dictionary.ContainsType.No) {
+            if (contains == Dictionary.ContainsType.No)
+            {
                 return;
             }
             if (currentWord.Length > 3 && contains == Dictionary.ContainsType.AsWord)

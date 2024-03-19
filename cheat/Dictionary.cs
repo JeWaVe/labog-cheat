@@ -1,27 +1,33 @@
 using System;
 using System.Collections.Generic;
 
-namespace LabogCheat {
-    public class Dictionary {
+namespace LabogCheat
+{
+    public class Dictionary
+    {
 
-        public enum ContainsType {
+        public enum ContainsType
+        {
             No,
             AsPrefix,
             AsWord
         }
 
-        class Node {
+        class Node
+        {
             public char letter;
             public bool terminator;
 
             public Dictionary<char, Node> childs;
 
-            public Node() {
+            public Node()
+            {
                 childs = new Dictionary<char, Node>();
                 terminator = false;
             }
 
-            public Node(char a) {
+            public Node(char a)
+            {
                 letter = a;
                 childs = new Dictionary<char, Node>();
                 terminator = false;
@@ -30,20 +36,26 @@ namespace LabogCheat {
 
         Node root;
 
-        public Dictionary() {
+        public Dictionary()
+        {
             root = new Node();
         }
 
-        public void Feed(IEnumerable<string> words) {
-            foreach(string w in words) {
+        public void Feed(IEnumerable<string> words)
+        {
+            foreach (string w in words)
+            {
                 Insert(w);
             }
         }
 
-        public void Insert(string word) {
+        public void Insert(string word)
+        {
             var node = root;
-            foreach(char c in word) {
-                if(!node.childs.ContainsKey(c)) {
+            foreach (char c in word)
+            {
+                if (!node.childs.ContainsKey(c))
+                {
                     node.childs.Add(c, new Node(c));
                 }
 
@@ -53,12 +65,16 @@ namespace LabogCheat {
             node.terminator = true;
         }
 
-        public ContainsType Contains(string word) {
+        public ContainsType Contains(string word)
+        {
             var node = root;
-            foreach(char c in word) {
-                if(!node.childs.ContainsKey(c)) {
+            foreach (char c in word)
+            {
+                if (!node.childs.ContainsKey(c))
+                {
                     return ContainsType.No;
                 }
+
                 node = node.childs[c];
             }
 
