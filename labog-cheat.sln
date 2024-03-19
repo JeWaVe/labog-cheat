@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "labog-cheat", "cheat\labog-cheat.csproj", "{41310EB1-38A2-4CD5-95FE-7D01EE1398D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "import", "import\import.csproj", "{38F11529-2BAB-48CF-84F2-BCD8461AA7C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wordlefr", "wordlefr\wordlefr.csproj", "{5A3D812F-0E51-49B0-83E0-333F4EB8417B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{41310EB1-38A2-4CD5-95FE-7D01EE1398D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41310EB1-38A2-4CD5-95FE-7D01EE1398D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41310EB1-38A2-4CD5-95FE-7D01EE1398D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41310EB1-38A2-4CD5-95FE-7D01EE1398D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38F11529-2BAB-48CF-84F2-BCD8461AA7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38F11529-2BAB-48CF-84F2-BCD8461AA7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38F11529-2BAB-48CF-84F2-BCD8461AA7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38F11529-2BAB-48CF-84F2-BCD8461AA7C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A3D812F-0E51-49B0-83E0-333F4EB8417B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A3D812F-0E51-49B0-83E0-333F4EB8417B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A3D812F-0E51-49B0-83E0-333F4EB8417B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A3D812F-0E51-49B0-83E0-333F4EB8417B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F173C45B-28C0-40FF-BEE6-1AE3273B3C9C}
+	EndGlobalSection
+EndGlobal

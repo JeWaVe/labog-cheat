@@ -7,10 +7,22 @@ namespace LabogCheat
     {
         public static int Main()
         {
-            var dico = new Words();
+            var dico = new Dictionary();
+            dico.Feed(File.ReadAllLines("grammalecte.txt").Select(w => w.Trim().ToLowerInvariant()));
+            dico.Feed(File.ReadAllLines("gutenberg.txt").Select(w => w.Trim().ToLowerInvariant()));
+
             Console.Out.WriteLine("Entrez la liste de lettres de la grille (jointives, dans le sens de la lecture) : ");
-            string input = Console.ReadLine();
-            var grid = new Grid(input.Trim().ToLowerInvariant());
+            string input;
+            while(true) {
+                input = Console.ReadLine().Trim().ToLowerInvariant();
+                if(input.Length != 16 || input.Any(c => c < 'a' || c > 'z')) {
+                    Console.WriteLine("invalid input, try again");
+                    continue;
+                }
+                break;
+            }
+
+            var grid = new Grid(input);
 
             while (true)
             {
@@ -21,7 +33,7 @@ namespace LabogCheat
                     Console.WriteLine("au revoir");
                     return 0;
                 }
-                else if (letter.Length > 1)
+                else if (letter.Length > 1 || letter.Length == 0 || letter[0] < 'a' || letter[0] > 'z')
                 {
                     Console.WriteLine("entrée invalide (une seule lettre à la fois), essayez encore");
                     continue;
@@ -45,7 +57,7 @@ namespace LabogCheat
             }
         }
 
-        static IEnumerable<string> Solve(Grid grid, Words dico, char letter)
+        static IEnumerable<string> Solve(Grid grid, Dictionary dico, char letter)
         {
             if (!grid.Contains(letter))
             {
@@ -61,19 +73,24 @@ namespace LabogCheat
             return result;
         }
 
-        static void SubSolve(Grid grid, Words dico, int i, int j, HashSet<string> foundWords)
+        static void SubSolve(Grid grid, Dictionary dico, int i, int j, HashSet<string> foundWords)
         {
             var currentPath = new List<(int, int)> { (i, j) };
             SubSolve(grid, dico, currentPath, foundWords);
         }
 
-        static void SubSolve(Grid grid, Words dico, List<(int, int)> currentPath, HashSet<string> foundWords)
+        static void SubSolve(Grid grid, Dictionary dico, List<(int, int)> currentPath, HashSet<string> foundWords)
         {
             var currentWord = grid.FromPath(currentPath);
-            if (currentWord.Length > 3 && dico.Contains(currentWord))
+            var contains = dico.Contains(currentWord);
+            if(contains == Dictionary.ContainsType.No) {
+                return;
+            }
+            if (currentWord.Length > 3 && contains == Dictionary.ContainsType.AsWord)
             {
                 foundWords.Add(currentWord);
             }
+
             var (x, y) = currentPath.Last();
             if (x > 0 && y > 0 && !currentPath.Contains((x - 1, y - 1)))
             {
