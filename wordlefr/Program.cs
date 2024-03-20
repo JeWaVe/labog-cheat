@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-
-namespace WordleFr {
+﻿namespace WordleFr {
     public class Program {
         public static void Main() {
             Console.WriteLine("Hello\n");
@@ -17,31 +12,120 @@ namespace WordleFr {
             }
 
             var candidates = new List<string>(words);
-            while(true) {
-                Console.WriteLine("entrez le mot que vous avez tapé dans le jeu :");
-                var attempt = Console.ReadLine().Trim().ToUpperInvariant();
-                Console.WriteLine("entre la réponse du jeu (0 pour gris, 1 pour orange, 2 pour vert, sans espace)");
-                var result = Console.ReadLine().Trim();
+            while(true)
+            {
+                Console.WriteLine("Entrez le mot que vous avez tapé dans le jeu :");
+                string attempt = ReadWord();
+                Console.WriteLine("Entre la réponse du jeu (0 pour gris, 1 pour orange, 2 pour vert, sans espace)");
+                string score = ReadScore();
+                candidates = FilterCandidates(candidates, attempt, score);
+                frequencies = ComputeFrequencies(candidates);
+                scores = Scores(candidates, frequencies);
+                candidates = candidates.OrderByDescending(candidate => scores[candidate]).ToList();
+                if(candidates.Count > 1) {
+                    Console.WriteLine("Les meilleurs candidats suivants sont : ");
+                    Console.Write(string.Join(", ", candidates.Take(5)));
+                } else if (candidates.Count == 1) {
+                    Console.WriteLine($"La solution est {candidates.First()}");
+                    Console.WriteLine("au revoir");
+                    return;
+                } else if (!candidates.Any()) {
+                    Console.WriteLine("Pas de solution possible, au revoir");
+                    return;
+                }
+            }
+        }
+
+        private static string ReadWord()
+        {
+            string attempt;
+            while (true)
+            {
+                var rawInput = Console.ReadLine();
+                if (string.IsNullOrEmpty(rawInput))
+                {
+                    Console.WriteLine("entrée invalide, recommencez");
+                    continue;
+                }
+                attempt = rawInput.Trim().ToUpperInvariant();
+                if (string.IsNullOrEmpty(attempt) || attempt.Length != 5 || attempt.Any(c => c < 'A' || c > 'Z'))
+                {
+                    Console.WriteLine("entrée invalide, recommencez");
+                    continue;
+                }
+                break;
+            }
+
+            return attempt;
+        }
+
+        private static List<string> FilterCandidates(List<string> candidates, string attempt, string score)
+        {
+            List<string> result = [];
+            foreach(var word in candidates) {
+                var insert = true;
                 for(int i = 0; i < 5; ++i) {
-                    var letter = attempt[i];
-                    var s = result[i];
-                    switch(s) {
-                        // letter is not in solution
-                        case '0':
-                            candidates = candidates.Where(candidate => !candidate.Contains(letter)).ToList();
-                        break;
-                        // letter is in the solution
-                        case '1':
-                        case '2':
-                            candidates = candidates.Where(candidate => candidate.Contains(letter)).ToList();
-                        break;
+                    char letter = attempt[i];
+                    char s = score[i];
+                    if(s == '0') {
+                        if(word.Contains(letter)) {
+                            Console.WriteLine($"word {word} contains {letter} but should not");
+                            insert = false;
+                            break;
+                        }
+                    }
+                    else if(s == '1') {
+                        if(!word.Contains(letter)) { 
+                            Console.WriteLine($"word {word} does not contain {letter} but should");
+                            insert = false;
+                            break;
+                        }
+                        if(word[i] == letter) {
+                            Console.WriteLine($"word {word} has {letter} at index {i} but should not");
+                            insert = false;
+                            break;
+                        }
+                    }
+                    else if (s == '2') {
+                        if(word[i] != letter) {
+                            Console.WriteLine($"word {word} has not {letter} at index {i} but should");
+                            insert = false;
+                            break;
+                        }
+                    }
+                    else {
+                        Environment.Exit(6); // abort - program inconsistent
                     }
                 }
-
-                candidates = candidates.OrderByDescending(candidate => scores[candidate]).ToList();
-                Console.WriteLine("best next candidates are : ");
-                Console.Write(string.Join(", ", candidates.Take(5)));
+                if(insert) {
+                    result.Add(word);
+                }
             }
+
+            return result;
+        }
+
+        private static string ReadScore()
+        {
+            string result;
+            while (true)
+            {
+                var rawInput = Console.ReadLine();
+                if (string.IsNullOrEmpty(rawInput))
+                {
+                    Console.WriteLine("entrée invalide, recommencez");
+                    continue;
+                }
+                result = rawInput.Trim();
+                if (string.IsNullOrEmpty(result) || result.Length != 5 || result.Any(c => c < '0' || c > '2'))
+                {
+                    Console.WriteLine("entrée invalide, recommencez");
+                    continue;
+                }
+                break;
+            }
+
+            return result;
         }
 
         static double[] ComputeFrequencies(IEnumerable<string> words) {

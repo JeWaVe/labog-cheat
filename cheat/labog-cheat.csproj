@@ -8,8 +8,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="grammalecte.txt" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="gutenberg.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="labog.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 
