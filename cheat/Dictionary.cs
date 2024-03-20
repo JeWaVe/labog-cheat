@@ -16,25 +16,25 @@ namespace LabogCheat
         class Node
         {
             public char letter;
-            public bool terminator;
+            public bool isEndOfWord;
 
             public Dictionary<char, Node> childs;
 
             public Node()
             {
-                childs = new Dictionary<char, Node>();
-                terminator = false;
+                childs = [];
+                isEndOfWord = false;
             }
 
             public Node(char a)
             {
                 letter = a;
-                childs = new Dictionary<char, Node>();
-                terminator = false;
+                childs = [];
+                isEndOfWord = false;
             }
         }
 
-        Node root;
+        readonly Node root;
 
         public Dictionary()
         {
@@ -54,15 +54,16 @@ namespace LabogCheat
             var node = root;
             foreach (char c in word)
             {
-                if (!node.childs.ContainsKey(c))
+                if (!node.childs.TryGetValue(c, out Node? next))
                 {
-                    node.childs.Add(c, new Node(c));
+                    next = new Node(c);
+                    node.childs.Add(c, next);
                 }
 
-                node = node.childs[c];
+                node = next;
             }
 
-            node.terminator = true;
+            node.isEndOfWord = true;
         }
 
         public ContainsType Contains(string word)
@@ -70,15 +71,15 @@ namespace LabogCheat
             var node = root;
             foreach (char c in word)
             {
-                if (!node.childs.ContainsKey(c))
+                if (!node.childs.TryGetValue(c, out Node? next))
                 {
                     return ContainsType.No;
                 }
 
-                node = node.childs[c];
+                node = next;
             }
 
-            return node.terminator ? ContainsType.AsWord : ContainsType.AsPrefix;
+            return node.isEndOfWord ? ContainsType.AsWord : ContainsType.AsPrefix;
         }
     }
 }

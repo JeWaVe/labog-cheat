@@ -7,4 +7,4 @@ cd cheat
 dotnet run
 ```
 
-et suivre les instructions. 
+et suivre les instructions.

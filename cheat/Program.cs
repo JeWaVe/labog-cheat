@@ -1,15 +1,11 @@
-﻿using System;
-using System.IO;
-
-namespace LabogCheat
+﻿namespace LabogCheat
 {
     public class Program
     {
         public static int Main()
         {
             var dico = new Dictionary();
-            dico.Feed(File.ReadAllLines("grammalecte.txt").Select(w => w.Trim().ToLowerInvariant()));
-            dico.Feed(File.ReadAllLines("gutenberg.txt").Select(w => w.Trim().ToLowerInvariant()));
+            dico.Feed(File.ReadAllLines("labog.txt").Select(w => w.Trim().ToLowerInvariant()));
 
             Console.Out.WriteLine("Entrez la liste de lettres de la grille (jointives, dans le sens de la lecture) : ");
             Grid grid = ReadGrid();
@@ -18,8 +14,13 @@ namespace LabogCheat
             while (true)
             {
                 Console.WriteLine("entrez la lettre de départ voulue (STOP pour quitter): ");
-                string letter = Console.ReadLine().Trim().ToLowerInvariant();
-                if (letter.ToUpperInvariant() == "STOP")
+                var rawInput = Console.ReadLine();
+                if(string.IsNullOrEmpty(rawInput)) {
+                    Console.WriteLine("entrée vide (une seule lettre à la fois), essayez encore");
+                    continue;
+                }
+                string letter = rawInput.Trim().ToLowerInvariant();
+                if (letter.Equals("STOP", StringComparison.InvariantCultureIgnoreCase))
                 {
                     Console.WriteLine("au revoir");
                     return 0;
@@ -53,7 +54,12 @@ namespace LabogCheat
             string input;
             while (true)
             {
-                input = Console.ReadLine().Trim().ToLowerInvariant();
+                var rawInput = Console.ReadLine();
+                if(string.IsNullOrEmpty(rawInput)) {
+                    Console.WriteLine("invalid input, try again");
+                    continue;
+                }
+                input = rawInput.Trim().ToLowerInvariant();
                 if (input.Length != 16 || input.Any(c => c < 'a' || c > 'z'))
                 {
                     Console.WriteLine("invalid input, try again");
