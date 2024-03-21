@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Update="mots.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="entropy.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
