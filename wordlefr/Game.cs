@@ -28,7 +28,7 @@ namespace WordleFr {
         }
 
         public int Solve() {
-            int step = 0;
+            int step = 1;
             while(!Play()) {
                 step++;
             }
