@@ -7,24 +7,33 @@ namespace WordleFr
         public static void Main()
         {
             List<string> candidates = File.ReadAllLines("mots.txt").ToHashSet().ToList();
+            List<string> never = File.ReadAllLines("never.txt").ToHashSet().ToList();
             Dictionary<string, float> entropy = ComputeInitialEntropies(candidates);
-            //Simulate(candidates, entropy);
+            var frequencies = Probabilities.ComputeLetterFrequencies(candidates);
+            Simulate(candidates, never, entropy, frequencies);
 
-            Play(candidates, entropy);
+            //Play(candidates, entropy);
         }
 
-        private static void Simulate(List<string> candidates, Dictionary<string, float> entropy)
+        private static void Simulate(List<string> candidates, List<string> never, Dictionary<string, float> entropy, Dictionary<char, float> frequencies)
         {
-            ConcurrentDictionary<int, int> results = new ConcurrentDictionary<int, int>();
+            ConcurrentDictionary<int, int> results = new();
+            var toTest = candidates.Except(never).ToList();
+            ConcurrentBag<string> allLines = [];
+            int id = 0;
+            int total = candidates.Count;
             Parallel.ForEach(candidates, c =>
             {
-                var g = new Game(c, candidates, entropy);
+                var g = new Game(c, candidates, entropy, frequencies);
                 int r = g.Solve();
                 results.TryGetValue(r, out int count);
                 results[r] = count + 1;
-                Console.WriteLine($"{c} solved in {r} steps");
+                allLines.Add(g.ToString());
+                id += 1;
+                Console.Write($"\r{id}/{total}");
             });
-            Console.WriteLine(string.Join("\n", results.Select(kvp => kvp.Key + ":" + kvp.Value)));
+
+            File.WriteAllLines("allResults.txt", allLines);
         }
 
         private static int Play(List<string> candidates, Dictionary<string, float> entropy)

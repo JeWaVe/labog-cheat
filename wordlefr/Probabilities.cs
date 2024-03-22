@@ -33,5 +33,24 @@ namespace WordleFr {
 
             return dict.OrderByDescending(kvp => kvp.Value).ToDictionary();
         }
+
+        public static Dictionary<char, float> ComputeLetterFrequencies(List<string> words) {
+            Dictionary<char, int> count = [];
+            int total = 0;
+            foreach(var word in words) {
+                foreach(char c in word) {
+                    count.TryAdd(c, 0);
+                    count[c] += 1;
+                    total += 1;
+                }
+            }
+
+            Dictionary<char, float> result = [];
+            foreach(var kvp in count) {
+                result[kvp.Key] = kvp.Value / (float) total;
+            }
+
+            return result;
+        }
     }
 }
