@@ -22,5 +22,16 @@ namespace WordleFr {
 
             return result;
         }
+
+        public static Dictionary<string, float> ComputeEntropies(List<string> remaining)
+        { 
+            var dict = new Dictionary<string, float>();
+            foreach (var word in remaining)
+            {
+                dict.Add(word, ComputeEntropy(word, remaining));
+            }
+
+            return dict.OrderByDescending(kvp => kvp.Value).ToDictionary();
+        }
     }
 }

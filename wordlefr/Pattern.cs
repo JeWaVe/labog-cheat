@@ -35,6 +35,19 @@ namespace WordleFr
             Array.Copy(bits, this.bits, 5);
         }
 
+        public Pattern (string expected, string attempt) {
+            bits = new byte[5];
+            for(int i = 0; i < 5; ++i) {
+                char e = expected[i];
+                char a = attempt[i];
+                if(e == a) {
+                    bits[i] = 2;
+                } else if(expected.Contains(a)) {
+                    bits[i] = 1;
+                }
+            }
+        }
+
         // returns true if 'attempt' matches current pattern for 'word'
         public bool Match(string word, string attempt)
         {
@@ -70,6 +83,10 @@ namespace WordleFr
             }
 
             return true;
+        }
+
+        public bool IsWin() {
+            return bits.All(b => b == 2);
         }
     }
 }

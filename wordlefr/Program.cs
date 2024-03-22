@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿
+using System.Collections.Concurrent;
 
 namespace WordleFr
 {
@@ -6,28 +7,46 @@ namespace WordleFr
         public static void Main()
         {
             List<string> candidates = File.ReadAllLines("mots.txt").ToHashSet().ToList();
-            var entropy = ComputeInitialEntropies(candidates);
-            while(true) {
+            Dictionary<string, float> entropy = ComputeInitialEntropies(candidates);
+            //Simulate(candidates, entropy);
+
+            Play(candidates, entropy);
+        }
+
+        private static void Simulate(List<string> candidates, Dictionary<string, float> entropy)
+        {
+            ConcurrentDictionary<int, int> results = new ConcurrentDictionary<int, int>();
+            Parallel.ForEach(candidates, c =>
+            {
+                var g = new Game(c, candidates, entropy);
+                int r = g.Solve();
+                results.TryGetValue(r, out int count);
+                results[r] = count + 1;
+                Console.WriteLine($"{c} solved in {r} steps");
+            });
+            Console.WriteLine(string.Join("\n", results.Select(kvp => kvp.Key + ":" + kvp.Value)));
+        }
+
+        private static int Play(List<string> candidates, Dictionary<string, float> entropy)
+        {
+            int steps = 0;
+            while (true)
+            {
                 Console.WriteLine("Les meilleurs mots sont à ce stade : ");
                 Console.WriteLine(string.Join("\n", entropy.Take(5).Select(kvp => kvp.Key + ", " + kvp.Value)));
                 Console.WriteLine("Entrez le mot que vous avez joué: ");
                 string word = ReadAttempt();
+                steps += 1;
                 Console.WriteLine("Entrez le score indiqué par le jeu (jointif), 0 pour gris, 1 pour orange, 2 pour vert : ");
                 Pattern score = ReadPattern();
+                if (score.IsWin())
+                {
+                    Console.WriteLine("Bravo !");
+                    return steps;
+                }
                 candidates = candidates.Where(tempt => score.Match(word, tempt)).ToList();
-                entropy = ComputeEntropies(candidates);
+                entropy = Probabilities.ComputeEntropies(candidates);
             }
-        }
-
-        private static Dictionary<string, float> ComputeEntropies(List<string> remaining)
-        { 
-            var dict = new Dictionary<string, float>();
-            foreach (var word in remaining)
-            {
-                dict.Add(word, Probabilities.ComputeEntropy(word, remaining));
-            }
-
-            return dict;
         }
 
         private static Pattern ReadPattern()
