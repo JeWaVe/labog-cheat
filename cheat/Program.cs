@@ -85,7 +85,8 @@
             {
                 SubSolve(grid, dico, i, j, result);
             }
-            return result;
+
+            return result.Order();
         }
 
         static void SubSolve(Grid grid, Dictionary dico, int i, int j, HashSet<string> foundWords)
