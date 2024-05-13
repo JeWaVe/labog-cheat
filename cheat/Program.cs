@@ -42,7 +42,10 @@
                     {
                         foreach (var w in words)
                         {
-                            Console.WriteLine($"\t{w}");
+                            Console.WriteLine($"\t{w}\nPress Enter to continue");
+                            if(Console.ReadKey(false).Key == ConsoleKey.Enter) {
+                                continue;
+                            }
                         }
                     }
                 }
@@ -76,7 +79,7 @@
         {
             if (!grid.Contains(letter))
             {
-                return new List<string>();
+                return [];
             }
 
             var result = new HashSet<string>();
