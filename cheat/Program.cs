@@ -2,10 +2,18 @@
 {
     public class Program
     {
-        public static int Main()
+        public static int Main(string[] args)
         {
             var dico = new Dictionary();
-            dico.Feed(File.ReadAllLines("labog.txt").Select(w => w.Trim().ToLowerInvariant()));
+            if(args.Length != 1) {
+                Console.WriteLine("cheat <fr|en>");
+                return 1;
+            }
+            if(args[0].ToLowerInvariant() == "fr") {
+                    dico.Feed(File.ReadAllLines("labog.txt").Select(w => w.Trim().ToLowerInvariant()));
+            } else {
+                dico.Feed(File.ReadAllLines("thebog.txt").Select(w => w.Trim().ToLowerInvariant())); 
+            }
 
             Console.Out.WriteLine("Entrez la liste de lettres de la grille (jointives, dans le sens de la lecture) : ");
             Grid grid = ReadGrid();
@@ -15,7 +23,8 @@
             {
                 Console.WriteLine("entrez la lettre de départ voulue (STOP pour quitter): ");
                 var rawInput = Console.ReadLine();
-                if(string.IsNullOrEmpty(rawInput)) {
+                if (string.IsNullOrEmpty(rawInput))
+                {
                     Console.WriteLine("entrée vide (une seule lettre à la fois), essayez encore");
                     continue;
                 }
@@ -43,7 +52,8 @@
                         foreach (var w in words)
                         {
                             Console.WriteLine($"\t{w}\nPress Enter to continue");
-                            if(Console.ReadKey(false).Key == ConsoleKey.Enter) {
+                            if (Console.ReadKey(false).Key == ConsoleKey.Enter)
+                            {
                                 continue;
                             }
                         }
@@ -58,7 +68,8 @@
             while (true)
             {
                 var rawInput = Console.ReadLine();
-                if(string.IsNullOrEmpty(rawInput)) {
+                if (string.IsNullOrEmpty(rawInput))
+                {
                     Console.WriteLine("invalid input, try again");
                     continue;
                 }

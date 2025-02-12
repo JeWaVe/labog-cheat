@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Update="labog.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="thebog.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 
